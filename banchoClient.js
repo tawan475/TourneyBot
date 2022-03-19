@@ -57,7 +57,10 @@ module.exports = class banchoClient extends EventEmitter {
 
         this._socket.connect(this._server, () => {
             this._messageProcessor = setInterval(() => {
-
+                let messageObj = this._messageQueue.shift();
+                this._socket.write(messageObj.message + '\r\n');
+                // acknowledge the message
+                messageObj.resolve();
             }, this.config.messageDelay);
 
             // Ready to send messages
@@ -73,4 +76,18 @@ module.exports = class banchoClient extends EventEmitter {
         this._socket.emit('close', "Terminate by user");
     }
 
+    // Send a message
+    send(message) {
+        return new Promise((resolve, reject) => {
+            if (!this._socket || this._socket.readyState !== 'open') {
+                reject(new Error('Socket is not connected.'));
+            }
+
+            if (message.length > this.config.messageSize) {
+                reject(new Error('Message is too big.'));
+            }
+
+            this._messageQueue.push({ message, resolve, reject });
+        });
+    }
 }
