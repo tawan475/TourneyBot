@@ -3,7 +3,7 @@ const { Socket } = require('net');
 
 module.exports = class banchoClient extends EventEmitter {
     // Constructor
-    constructor(host, port, username, password) {
+    constructor({ host, port, username, password }) {
         super();
 
         this._server = { host, port };
@@ -42,21 +42,14 @@ module.exports = class banchoClient extends EventEmitter {
             this.emit('data', data);
         });
 
-        // Socket is disconnected
+        // Socket is half close
         this._socket.on('end', () => {
             this.emit('end');
         });
 
-        this._socket.on('close', () => {
-            while (this.messageQueue.length > 0) {
-                const obj = this._outgoing_messages.shift();
-                obj.callback();
-            }
-
-            this._buffer = '';
-            clearInterval(this._writer);
-            this._writer = null;
-            this.emit('disconnect');
+        // Socket is closed
+        this._socket.on('close', (hadError) => {
+            this.emit('close', hadError);
         });
 
         this._socket.connect(this._server, () => {
