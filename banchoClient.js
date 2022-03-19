@@ -56,6 +56,7 @@ module.exports = class banchoClient extends EventEmitter {
         });
 
         this._socket.connect(this._server, () => {
+            // Activate message processor
             this._messageProcessor = setInterval(() => {
                 let messageObj = this._messageQueue.shift();
                 this._socket.write(messageObj.message + '\r\n');
