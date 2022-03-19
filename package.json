@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/tawan475/TourneyBot/issues"
   },
-  "homepage": "https://github.com/tawan475/TourneyBot#readme"
+  "homepage": "https://github.com/tawan475/TourneyBot#readme",
+  "dependencies": {
+    "eventemitter3": "^4.0.7"
+  }
 }
