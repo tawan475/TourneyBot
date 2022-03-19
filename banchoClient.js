@@ -51,8 +51,11 @@ module.exports = class banchoClient extends EventEmitter {
         });
 
         // Socket is closed
-        this._socket.on('close', (hadError) => {
-            this.emit('close', hadError);
+        this._socket.on('close', (hadError, reason) => {
+            this.emit('close', hadError, reason);
+
+            // Terminate the message processor
+            clearInterval(this._messageProcessor);
         });
 
         this._socket.connect(this._server, () => {
@@ -74,7 +77,7 @@ module.exports = class banchoClient extends EventEmitter {
     // Terminate the connection
     close() {
         this._socket.destroy();
-        this._socket.emit('close', "Terminate by user");
+        this._socket.emit('close', false, "Terminate by user");
     }
 
     // Send a message
