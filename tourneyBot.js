@@ -6,7 +6,7 @@ const bancho = new banchoClient({
     password: process.env.BANCHO_PASSWORD
 });
 
-bancho.on('connect', () => {
+bancho.once('connect', () => {
     console.log('Connected to bancho.');
 });
 

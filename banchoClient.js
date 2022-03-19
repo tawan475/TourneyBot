@@ -3,14 +3,17 @@ const { Socket } = require('net');
 
 module.exports = class banchoClient extends EventEmitter {
     // Constructor
-    constructor({ host, port, username, password }) {
+    constructor({ host, port, username, password }, config) {
         super();
+
+        this._config = config;
 
         this._server = { host, port };
         this._username = username;
         this._password = password;
 
-        this.messageQueue = [];
+        this._messageQueue = [];
+        this._messageProcessor = null;
 
         // Create socket
         this._socket = new Socket();
@@ -53,6 +56,9 @@ module.exports = class banchoClient extends EventEmitter {
         });
 
         this._socket.connect(this._server, () => {
+            this._messageProcessor = setInterval(() => {
+
+            }, this.config.messageDelay);
 
             // Ready to send messages
             this._socket.on('ready', () => {
