@@ -1,3 +1,4 @@
 {
-    "messageDelay": 1000
+    "messageDelay": 1000,
+    "messageSize": 449
 }
