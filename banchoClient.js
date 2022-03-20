@@ -83,8 +83,9 @@ module.exports = class banchoClient extends EventEmitter {
                     raw: line
                 };
                 if (message.type === 'QUIT') continue;
-                if (message.type === 'PING') {
-                    this.send('PONG ' + message.args.join(' '));
+                if (message.source === 'PING') {
+                    console.log(message)
+                    this.send('PONG ' + segment.slice(1).join(' '));
                     continue;
                 }
 
@@ -96,7 +97,12 @@ module.exports = class banchoClient extends EventEmitter {
                     this._messageProcessorInterval = setInterval(this._messageProcessor, this._config.messageDelay);
                 }
 
-                if (message.type === 'PRIVMSG') {
+                if (message.type === 'JOIN') {
+                    console.log(line, message)
+                    continue;
+                }
+
+                if (message.type === 'PRIVMSG' && message.args[0] === this._username) {
                     // Handle private messages
                     message.author = message.source.substring(1, message.source.indexOf('!'));
                     message.args.shift();
@@ -153,5 +159,16 @@ module.exports = class banchoClient extends EventEmitter {
 
             this._messageQueue.push({ message, resolve, reject });
         });
+    }
+
+    // Send a private message to a user
+    pm(user, message) {
+        return this.send(`PRIVMSG ${user} :${message}`);
+    }
+
+    // Join a lobby
+    join(lobby) {
+        if (!lobby.startsWith('#')) lobby+= '#' + lobby;
+        return this.send(`JOIN ${lobby}`);
     }
 }

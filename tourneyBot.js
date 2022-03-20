@@ -20,7 +20,7 @@ bancho.on('message', (message) => {
 });
 
 bancho.on('pm', (pm) => {
-    console.log(pm.author + ': ' + pm.content);
+    console.log(pm);
 });
 
 bancho.connect();
