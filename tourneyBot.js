@@ -8,13 +8,15 @@ bancho.once('error', (err) => {
 
 bancho.once('ready', () => {
     console.log('Connected and logged in to bancho.');
+    bancho.join("#mp_98943277");
 });
 
 bancho.on('disconnect', () => {
     console.log('Disconnected from bancho.');
 });
 
-bancho.on('lobbyJoined', (lobby) => {
+bancho.on('lobbyJoined', (lobby, err) => {
+    if (err) console.error(err);
     console.log(`Joined lobby ${lobby.channel}`);
 });
 
