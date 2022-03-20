@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/tawan475/TourneyBot#readme",
   "dependencies": {
-    "dotenv": "^16.0.0",
-    "eventemitter3": "^4.0.7"
+    "@tawan475/bancho.js": "latest",
+    "dotenv": "^16.0.0"
   }
 }

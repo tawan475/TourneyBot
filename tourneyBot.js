@@ -1,10 +1,9 @@
 require('dotenv').config();
-const banchoClient = require('./banchoClient.js');
+const { banchoClient, banchoLobby } = require('@tawan475/bancho.js');
 const bancho = new banchoClient();
 
 bancho.once('ready', () => {
     console.log('Connected and logged in to bancho.');
-    bancho.join("#mp_98943277");
 
     // 332 multiplayer id
     // 333 unix server time
