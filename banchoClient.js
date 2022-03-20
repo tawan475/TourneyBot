@@ -3,7 +3,7 @@ const { Socket } = require('net');
 
 module.exports = class banchoClient extends EventEmitter {
     // Constructor
-    constructor({ host, port, username, password }, config = {
+    constructor({ host, port }, config = {
         messageDelay: 1000,
         messageSize: 449
     }) {
@@ -13,9 +13,10 @@ module.exports = class banchoClient extends EventEmitter {
         this._config.messageDelay = config.messageDelay || 1000;
         this._config.messageSize = config.messageSize || 449;
 
-        this._server = { host, port };
-        this._username = username;
-        this._password = password;
+        this._server = { 
+            host: host || 'irc.ppy.sh',, 
+            port: port || 6667
+        };
 
         this._messageQueue = [];
         this._messageProcessorInterval = null;
@@ -33,17 +34,14 @@ module.exports = class banchoClient extends EventEmitter {
         this._socket = new Socket();
         this._socket.setMaxListeners(0);
 
-        // Internal functions
+        // Actually sending message
         this._send = (message) => {
             if (!message) return;
 
             this._socket.write(message);
             console.debug(">" + message);
         }
-    }
 
-    // Connect to the server
-    connect() {
         // Configure socket
         this._socket.setEncoding('utf8');
         this._socket.setKeepAlive(true);
@@ -64,15 +62,15 @@ module.exports = class banchoClient extends EventEmitter {
         });
 
         // Recieve incoming data
-        let buffer = '';
+        this._buffer = '';
         this._socket.on('data', (data) => {
             this.emit('data', data);
-            buffer += data.toString().replace(/\r/g, "");
-            let lines = buffer.split('\n');
+            this._buffer += data.toString().replace(/\r/g, "");
+            let lines = this._buffer.split('\n');
 
             // if the last line is not complete, then we need carry over and wait for the next data event
             if (!lines[lines.length - 1].endsWith('\n')) {
-                buffer = lines.pop();
+                this._buffer = lines.pop();
             }
 
             // emit each line separately
@@ -136,11 +134,16 @@ module.exports = class banchoClient extends EventEmitter {
             // Terminate the message processor
             clearInterval(this._messageProcessor);
         });
+    }
 
+    // Connect & login to the server
+    // remove from constructor to void and not save the credentials
+    // improve security
+    login({ username, password }) {
         this._socket.connect(this._server, () => {
-            this._socket.write(`PASS ${this._password}` + "\r\n");
-            this._socket.write(`USER ${this._username} 0 * :${this._username}` + "\r\n");
-            this._socket.write(`NICK ${this._username}` + "\r\n");
+            this._socket.write(`PASS ${password}` + "\r\n");
+            this._socket.write(`USER ${username} 0 * :${username}` + "\r\n");
+            this._socket.write(`NICK ${username}` + "\r\n");
         });
     }
 

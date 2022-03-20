@@ -1,11 +1,6 @@
 require('dotenv').config();
 const banchoClient = require('./banchoClient.js');
-const bancho = new banchoClient({ 
-    host: process.env.BANCHO_HOST,
-    port: process.env.BANCHO_PORT,
-    username: process.env.BANCHO_USERNAME,
-    password: process.env.BANCHO_PASSWORD
-});
+const bancho = new banchoClient();
 
 bancho.once('ready', () => {
     console.log('Connected and logged in to bancho.');
@@ -23,4 +18,7 @@ bancho.on('pm', (pm) => {
     console.log(pm);
 });
 
-bancho.connect();
+bancho.login({
+    username: process.env.BANCHO_USERNAME,
+    password: process.env.BANCHO_PASSWORD,
+});
