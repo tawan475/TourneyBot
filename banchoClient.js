@@ -3,7 +3,8 @@ const { Socket } = require('net');
 
 module.exports = class banchoClient extends EventEmitter {
     // Constructor
-    constructor({ host, port }, config = {
+    constructor(config = {
+        host: 'irc.ppy.sh', port: 6667,
         messageDelay: 1000,
         messageSize: 449
     }) {
@@ -12,10 +13,12 @@ module.exports = class banchoClient extends EventEmitter {
         this._config = config;
         this._config.messageDelay = config.messageDelay || 1000;
         this._config.messageSize = config.messageSize || 449;
+        this._config.host = config.host || 'irc.ppy.sh';
+        this._config.port = config.port || 6667;
 
         this._server = { 
-            host: host || 'irc.ppy.sh',
-            port: port || 6667
+            host: this._config.host,
+            port: this._config.port
         };
 
         this._messageQueue = [];
