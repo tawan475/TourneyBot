@@ -10,6 +10,8 @@ module.exports = class banchoClient extends EventEmitter {
         super();
 
         this._config = config;
+        this._config.messageDelay = config.messageDelay || 1000;
+        this._config.messageSize = config.messageSize || 449;
 
         this._server = { host, port };
         this._username = username;
@@ -98,6 +100,7 @@ module.exports = class banchoClient extends EventEmitter {
                 }
 
                 if (message.type === 'JOIN') {
+                    message.author = message.source.substring(1, message.source.indexOf('!'));
                     console.log(line, message)
                     continue;
                 }
@@ -105,7 +108,9 @@ module.exports = class banchoClient extends EventEmitter {
                 if (message.type === 'PRIVMSG' && message.args[0] === this._username) {
                     // Handle private messages
                     message.author = message.source.substring(1, message.source.indexOf('!'));
+                    // remove author from args
                     message.args.shift();
+                    // remove the first ":"
                     message.args[0] = message.args[0].substring(1);
                     message.content = message.args.join(' ');
                     this.emit('pm', message);
