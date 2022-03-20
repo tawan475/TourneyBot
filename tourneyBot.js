@@ -4,10 +4,20 @@ const bancho = new banchoClient();
 
 bancho.once('ready', () => {
     console.log('Connected and logged in to bancho.');
+    bancho.join("#mp_98943277");
+
+    // 332 multiplayer id
+    // 333 unix server time
+    // 353 prob userlist
+    // 366 end of list
 });
 
 bancho.on('disconnect', () => {
     console.log('Disconnected from bancho.');
+});
+
+bancho.on('lobbyJoined', (lobby) => {
+    console.log(`Joined lobby ${lobby.channel}`);
 });
 
 bancho.on('message', (message) => {
