@@ -44,13 +44,29 @@ module.exports = class banchoClient extends EventEmitter {
         });
 
         // Recieve incoming data
+        let buffer = '';
         this._socket.on('data', (data) => {
             this.emit('data', data);
+            buffer += data.toString().replace(/\r/g, "");
+            let lines = buffer.split('\n');
+
+            // if the last line is not complete, then we need carry over and wait for the next data event
+            if (!lines[ lines.length - 1 ].endsWith('\n')) {
+                buffer = lines.pop();
+            }
+
+            // emit each line separately
+            for (line of lines){
+                this.emit('messge', line)
+            }
         });
 
         // Socket is half close
         this._socket.on('end', () => {
             this.emit('end');
+            
+            // Terminate the message processor
+            clearInterval(this._messageProcessor);
         });
 
         // Socket is closed
@@ -62,13 +78,19 @@ module.exports = class banchoClient extends EventEmitter {
         });
 
         this._socket.connect(this._server, () => {
+            this.send(`PASS ${this._password}`);
+            this.send(`USER ${this._username} 0 * :${this._username}`);
+            this.send(`NICK ${this._username}`);
+
+
             // Activate message processor
             this._messageProcessor = setInterval(() => {
                 let messageObj = this._messageQueue.shift();
+                if (!messageObj || !messageObj?.message) return;
                 this._socket.write(messageObj.message + '\r\n');
                 // acknowledge the message
                 messageObj.resolve();
-            }, this.config.messageDelay);
+            }, this._config.messageDelay);
 
             // Ready to send messages
             this._socket.on('ready', () => {
@@ -91,7 +113,7 @@ module.exports = class banchoClient extends EventEmitter {
             //     reject(new Error('Socket is not connected.'));
             // }
 
-            if (message.length > this.config.messageSize) {
+            if (message.length > this._config.messageSize) {
                 reject(new Error('Message is too big.'));
             }
 

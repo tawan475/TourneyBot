@@ -1,3 +1,4 @@
+require('dotenv').config();
 const banchoClient = require('./banchoClient.js');
 const bancho = new banchoClient({ 
     host: process.env.BANCHO_HOST,
@@ -14,8 +15,8 @@ bancho.on('disconnect', () => {
     console.log('Disconnected from bancho.');
 });
 
-bancho.on('data', (data) => {
-    console.log(data);
+bancho.on('message', (message) => {
+    console.log(message);
 });
 
 bancho.connect();
