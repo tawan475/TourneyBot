@@ -167,8 +167,8 @@ module.exports = class banchoClient extends EventEmitter {
     }
 
     // Join a lobby
-    join(lobby) {
-        if (!lobby.startsWith('#')) lobby+= '#' + lobby;
-        return this.send(`JOIN ${lobby}`);
+    join(channel) {
+        if (!channel.startsWith('#')) channel+= '#' + channel;
+        return this.send(`JOIN ${channel}`);
     }
 }
