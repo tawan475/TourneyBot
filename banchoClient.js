@@ -14,7 +14,7 @@ module.exports = class banchoClient extends EventEmitter {
         this._config.messageSize = config.messageSize || 449;
 
         this._server = { 
-            host: host || 'irc.ppy.sh',, 
+            host: host || 'irc.ppy.sh',
             port: port || 6667
         };
 
