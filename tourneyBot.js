@@ -2,13 +2,12 @@ require('dotenv').config();
 const { banchoClient, banchoLobby } = require('@tawan475/bancho.js');
 const bancho = new banchoClient();
 
+bancho.once('error', (err) => {
+    console.error(err);
+});
+
 bancho.once('ready', () => {
     console.log('Connected and logged in to bancho.');
-
-    // 332 multiplayer id
-    // 333 unix server time
-    // 353 prob userlist
-    // 366 end of list
 });
 
 bancho.on('disconnect', () => {
