@@ -16,7 +16,16 @@ module.exports = class banchoClient extends EventEmitter {
         this._password = password;
 
         this._messageQueue = [];
-        this._messageProcessor = null;
+        this._messageProcessorInterval = null;
+        this._messageProcessor = () => {
+            let messageObj = this._messageQueue.shift();
+            if (!messageObj || !messageObj?.message) return;
+            let message = messageObj.message + '\r\n';
+
+            this._socket.write(message);
+            // acknowledge the message
+            messageObj.resolve();
+        }
 
         // Create socket
         this._socket = new Socket();
@@ -52,12 +61,12 @@ module.exports = class banchoClient extends EventEmitter {
             let lines = buffer.split('\n');
 
             // if the last line is not complete, then we need carry over and wait for the next data event
-            if (!lines[ lines.length - 1 ].endsWith('\n')) {
+            if (!lines[lines.length - 1].endsWith('\n')) {
                 buffer = lines.pop();
             }
 
             // emit each line separately
-            for (let line of lines){
+            for (let line of lines) {
                 let segment = line.split(' ');
                 let message = {
                     source: segment[0],
@@ -66,10 +75,13 @@ module.exports = class banchoClient extends EventEmitter {
                     raw: line
                 };
                 if (message.type === 'QUIT') continue;
-                
+
                 if (message.type === '001') {
                     // Connected and logged in to the server
                     this.emit('ready');
+
+                    // Activate message processor
+                    this._messageProcessorInterval = setInterval(this._messageProcessor, this._config.messageDelay);
                 }
 
                 if (message.type === 'PRIVMSG') {
@@ -89,9 +101,9 @@ module.exports = class banchoClient extends EventEmitter {
         // Socket is half close
         this._socket.on('end', () => {
             this.emit('end');
-            
+
             // Terminate the message processor
-            clearInterval(this._messageProcessor);
+            clearInterval(this._messageProcessorInterval);
         });
 
         // Socket is closed
@@ -103,20 +115,9 @@ module.exports = class banchoClient extends EventEmitter {
         });
 
         this._socket.connect(this._server, () => {
-            this.send(`PASS ${this._password}`);
-            this.send(`USER ${this._username} 0 * :${this._username}`);
-            this.send(`NICK ${this._username}`);
-
-            // Activate message processor
-            this._messageProcessor = setInterval(() => {
-                let messageObj = this._messageQueue.shift();
-                if (!messageObj || !messageObj?.message) return;
-                let message = messageObj.message + '\r\n';
-
-                this._socket.write(message);
-                // acknowledge the message
-                messageObj.resolve();
-            }, this._config.messageDelay);
+            this._socket.write(`PASS ${this._password}` + "\r\n");
+            this._socket.write(`USER ${this._username} 0 * :${this._username}` + "\r\n");
+            this._socket.write(`NICK ${this._username}` + "\r\n");
         });
     }
 
@@ -126,10 +127,10 @@ module.exports = class banchoClient extends EventEmitter {
         this._socket.emit('close', false, "Terminate by user");
     }
 
-    // Send a message
+    // Add a message to the queue
     send(message) {
         return new Promise((resolve, reject) => {
-            // // not needed due to the message processor only send message when it is connected and ready
+            // // not needed due to the message processor only process message when it is connected and ready
             // if (!this._socket || this._socket.readyState !== 'open') {
             //     reject(new Error('Socket is not connected.'));
             // }
