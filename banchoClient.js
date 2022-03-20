@@ -20,6 +20,7 @@ module.exports = class banchoClient extends EventEmitter {
 
         // Create socket
         this._socket = new Socket();
+        this._socket.setMaxListeners(0);
     }
 
     // Connect to the server
@@ -57,7 +58,31 @@ module.exports = class banchoClient extends EventEmitter {
 
             // emit each line separately
             for (let line of lines){
-                this.emit('messge', line)
+                let segment = line.split(' ');
+                let message = {
+                    source: segment[0],
+                    type: segment[1],
+                    args: segment.slice(2),
+                    raw: line
+                };
+                if (message.type === 'QUIT') continue;
+                
+                if (message.type === '001') {
+                    // Connected and logged in to the server
+                    this.emit('ready');
+                }
+
+                if (message.type === 'PRIVMSG') {
+                    // Handle private messages
+                    message.author = message.source.substring(1, message.source.indexOf('!'));
+                    message.args.shift();
+                    message.args[0] = message.args[0].substring(1);
+                    message.content = message.args.join(' ');
+                    this.emit('pm', message);
+                    continue;
+                }
+
+                this.emit('message', message)
             }
         });
 
@@ -82,20 +107,16 @@ module.exports = class banchoClient extends EventEmitter {
             this.send(`USER ${this._username} 0 * :${this._username}`);
             this.send(`NICK ${this._username}`);
 
-
             // Activate message processor
             this._messageProcessor = setInterval(() => {
                 let messageObj = this._messageQueue.shift();
                 if (!messageObj || !messageObj?.message) return;
-                this._socket.write(messageObj.message + '\r\n');
+                let message = messageObj.message + '\r\n';
+
+                this._socket.write(message);
                 // acknowledge the message
                 messageObj.resolve();
             }, this._config.messageDelay);
-
-            // Ready to send messages
-            this._socket.on('ready', () => {
-                this.emit('ready');
-            });
         });
     }
 

@@ -7,8 +7,8 @@ const bancho = new banchoClient({
     password: process.env.BANCHO_PASSWORD
 });
 
-bancho.once('connect', () => {
-    console.log('Connected to bancho.');
+bancho.once('ready', () => {
+    console.log('Connected and logged in to bancho.');
 });
 
 bancho.on('disconnect', () => {
@@ -16,7 +16,11 @@ bancho.on('disconnect', () => {
 });
 
 bancho.on('message', (message) => {
-    console.log(message);
+    console.log(message.raw);
+});
+
+bancho.on('pm', (pm) => {
+    console.log(pm.author + ': ' + pm.content);
 });
 
 bancho.connect();
