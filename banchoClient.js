@@ -3,7 +3,10 @@ const { Socket } = require('net');
 
 module.exports = class banchoClient extends EventEmitter {
     // Constructor
-    constructor({ host, port, username, password }, config) {
+    constructor({ host, port, username, password }, config = {
+        messageDelay: 1000,
+        messageSize: 449
+    }) {
         super();
 
         this._config = config;
@@ -83,9 +86,10 @@ module.exports = class banchoClient extends EventEmitter {
     // Send a message
     send(message) {
         return new Promise((resolve, reject) => {
-            if (!this._socket || this._socket.readyState !== 'open') {
-                reject(new Error('Socket is not connected.'));
-            }
+            // // not needed due to the message processor only send message when it is connected and ready
+            // if (!this._socket || this._socket.readyState !== 'open') {
+            //     reject(new Error('Socket is not connected.'));
+            // }
 
             if (message.length > this.config.messageSize) {
                 reject(new Error('Message is too big.'));
