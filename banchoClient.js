@@ -56,7 +56,7 @@ module.exports = class banchoClient extends EventEmitter {
             }
 
             // emit each line separately
-            for (line of lines){
+            for (let line of lines){
                 this.emit('messge', line)
             }
         });
