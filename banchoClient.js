@@ -20,9 +20,9 @@ module.exports = class banchoClient extends EventEmitter {
         this._messageProcessor = () => {
             let messageObj = this._messageQueue.shift();
             if (!messageObj || !messageObj?.message) return;
-            let message = messageObj.message + '\r\n';
+            let message = messageObj.message + "\r\n";
 
-            this._socket.write(message);
+            this._send(message);
             // acknowledge the message
             messageObj.resolve();
         }
@@ -30,6 +30,14 @@ module.exports = class banchoClient extends EventEmitter {
         // Create socket
         this._socket = new Socket();
         this._socket.setMaxListeners(0);
+
+        // Internal functions
+        this._send = (message) => {
+            if (!message) return;
+
+            this._socket.write(message);
+            console.debug(">" + message);
+        }
     }
 
     // Connect to the server
@@ -75,6 +83,10 @@ module.exports = class banchoClient extends EventEmitter {
                     raw: line
                 };
                 if (message.type === 'QUIT') continue;
+                if (message.type === 'PING') {
+                    this.send('PONG ' + message.args.join(' '));
+                    continue;
+                }
 
                 if (message.type === '001') {
                     // Connected and logged in to the server
