@@ -1,6 +1,7 @@
 require('dotenv').config();
 const { banchoClient } = require('@tawan475/bancho.js');
 const bancho = new banchoClient();
+const testMatchId = "";
 
 bancho.on('error', (err) => {
     // Don't forget to handle error correctly!
@@ -10,7 +11,7 @@ bancho.on('error', (err) => {
 bancho.once('ready', () => {
     console.log('Connected and logged in to bancho.');
     // Ready to send messages
-    bancho.join('#mp_98954523');
+    bancho.join(testMatchId);
 });
 
 bancho.on('disconnect', () => {
@@ -20,8 +21,8 @@ bancho.on('disconnect', () => {
 
 bancho.on('channelJoin', (message) => {
     console.log(`Joined lobby ${message.channel.name}`);
-    if (message.channel.name === '#mp_98954523') {
-        message.channel.send("Hello World!");
+    if (message.channel.name === testMatchId) {
+        // message.channel.send("Hello World!");
     }
 });
 
@@ -29,7 +30,7 @@ bancho.on('channelLeave', (channel, err) => {
     if (err) {
         // This is considered soft error and
         // will not cause error event that make the bot to disconnect
-        if (err.message === 'No such channel.') return console.log(`Left lobby ${channel}`);
+        if (err.message === 'No such channel.') return console.log(`No such channel: ${channel}`);
     }
     console.log(`Left lobby ${channel}`);
 });
@@ -47,6 +48,7 @@ bancho.on('multiplayer', (message) => {
 });
 
 bancho.on('sendMessage', (message) => {
+    message = message.replace(/\r?\n$/, '');
     if (message.startsWith('PONG ')) return;
     console.log("> " + message);
 })
