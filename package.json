@@ -18,6 +18,7 @@
   "homepage": "https://github.com/tawan475/TourneyBot#readme",
   "dependencies": {
     "@tawan475/bancho.js": "latest",
+    "@tawan475/log.js": "^0.0.1",
     "discord.js": "^13.6.0",
     "dotenv": "^16.0.0"
   }
