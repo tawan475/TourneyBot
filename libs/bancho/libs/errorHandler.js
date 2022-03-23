@@ -4,4 +4,6 @@ module.exports = (bancho) => {
         // Don't forget to handle error correctly!
         this.log("ERROR: ", err);
     });
+    
+    return module.exports;
 }

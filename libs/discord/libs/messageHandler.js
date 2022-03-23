@@ -3,4 +3,6 @@ module.exports = (discord) => {
     discord.on('messageCreate', (message) => {
         if (message.content) this.log(`${message.author.username}: ${message.content}`);
     });
+    
+    return module.exports;
 }

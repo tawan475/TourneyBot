@@ -30,4 +30,6 @@ module.exports = (bancho) => {
     bancho.on('multiplayer', (message) => {
         this.log("multiplayer " + message.raw);
     });
+    
+    return module.exports;
 }
