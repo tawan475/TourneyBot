@@ -2,7 +2,7 @@ module.exports = function (client) {
     module.name = "joinlobby"
     module.aliases = []
     module.cooldown = 1000
-    module.execute = async function execute(discord, message, args) {
+    module.execute = function execute(discord, message, args) {
         if (message.author.id !== "728267443394576434") {
             return message.reply("Sorry! you do not have permissions to do that.");
         }
@@ -12,5 +12,5 @@ module.exports = function (client) {
         return message.reply("Lobby joined!")
     }
 
-    return module.exports;
+    return module;
 };

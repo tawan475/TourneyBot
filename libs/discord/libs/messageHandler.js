@@ -28,6 +28,7 @@ module.exports = (discord) => {
             // if (command === 'reload' || command === 'restart') discord.say(channel, "Restarting...").then(() => process.exit(0));
         }
 
+        console.log(command, discord.commands)
         var rCommand = discord.commands[command] ||
             discord.commands[Object.keys(discord.commands)
                 .filter(cmd => discord.commands[cmd].aliases &&

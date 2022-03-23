@@ -5,5 +5,5 @@ module.exports = (bancho) => {
         this.log("ERROR: ", err);
     });
     
-    return module.exports;
+    return module;
 }
