@@ -28,7 +28,6 @@ module.exports = (discord) => {
             // if (command === 'reload' || command === 'restart') discord.say(channel, "Restarting...").then(() => process.exit(0));
         }
 
-        console.log(command, discord.commands)
         var rCommand = discord.commands[command] ||
             discord.commands[Object.keys(discord.commands)
                 .filter(cmd => discord.commands[cmd].aliases &&
@@ -38,7 +37,6 @@ module.exports = (discord) => {
         let fileHASH = discord.app.HASH(fs.readFileSync(rCommand.filePath));
         if (rCommand.HASH !== fileHASH)
             discord[rCommand.folder][rCommand.filename] = require(rCommand.filePath)
-
 
         if (!discord.cooldowns.has(rCommand.name)) discord.cooldowns.set(rCommand.name, new Collection());
         let commandCooldown = discord.cooldowns.get(rCommand.name);

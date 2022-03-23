@@ -1,6 +1,6 @@
-module.exports = function (client) {
-    module.name = "joinlobby"
-    module.aliases = []
+module.exports = function (discord) {
+    this.log = discord.log.dir("joinOsuLobby.js");
+    module.aliases = ['joinlobby']
     module.cooldown = 1000
     module.execute = function execute(discord, message, args) {
         if (message.author.id !== "728267443394576434") {
