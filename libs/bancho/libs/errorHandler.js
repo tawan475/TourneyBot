@@ -1,6 +1,7 @@
 module.exports = (bancho) => {
+    this.log = bancho.log.dir("errorHandler.js")
     bancho.on('error', (err) => {
         // Don't forget to handle error correctly!
-        console.error(err);
+        this.log("ERROR: ", err);
     });
 }
