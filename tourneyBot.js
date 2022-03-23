@@ -1,5 +1,6 @@
 require('dotenv').config();
 const app = this;
+app.dirname = __dirname;
 
 // Add global functions ie. logging functions, etc.
 require('./libs/globalFunctions.js')(app);

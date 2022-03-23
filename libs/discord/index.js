@@ -1,21 +1,25 @@
 module.exports = (app) => {
     const { Client, Intents } = require('discord.js');
-    const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
+    const discord = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
 
     // Attach main app to discord
     discord.app = app;
     // Attach discord to main application
-    app.discord = client;
+    app.discord = discord;
+    // setup dirname for discord
+    discord.dirname = path.join(app.dirname, './libs/discord');
     // branch log directory from main application
-    client.log = app.log.dir("discord/");
-    this.log = client.log.dir("index.js");
+    discord.log = app.log.dir("discord/");
 
-    client.once('ready', () => {
+    this.log = discord.log.dir("index.js");
+
+    discord.once('ready', () => {
         this.log("Connected to discord.");
     });
 
-    require("./libs/messageHandler.js")(client);
+    // Use loader to attach stuff to discord
+    require("./loader.js")(discord);
 
     // Login to Discord with your client's token
-    client.login(process.env.DISCORD_TOKEN);
+    discord.login(process.env.DISCORD_TOKEN);
 }

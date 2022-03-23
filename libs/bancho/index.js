@@ -1,3 +1,4 @@
+const path = require('path');
 module.exports = (app) => {
     const { banchoClient } = require('@tawan475/bancho.js');
     const bancho = new banchoClient();
@@ -6,6 +7,8 @@ module.exports = (app) => {
     bancho.app = app
     // Attach bancho to main application
     app.bancho = bancho;
+    // setup dirname for bancho
+    bancho.dirname = path.join(app.dirname, './libs/bancho');
     // branch log directory from main application
     bancho.log = app.log.dir("bancho/");
 
@@ -20,8 +23,9 @@ module.exports = (app) => {
         this.log('Disconnected from bancho.');
     });
 
-    require("./libs/errorHandler.js")(bancho);
-    require("./libs/messageHandler.js")(bancho);
+    require("./loader.js")(bancho, [
+        path.join(bancho.dirname, './libs'),
+    ]);
 
     bancho.login({
         username: process.env.BANCHO_USERNAME,
