@@ -1,4 +1,4 @@
-module.export = (app) => {
+module.exports = (app) => {
     const Logger = require('@tawan475/log.js');
     let logger = new Logger({
         consoleLog: true,
