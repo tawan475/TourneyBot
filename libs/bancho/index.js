@@ -6,14 +6,16 @@ module.exports = (app) => {
     app.bancho = bancho;
     // branch log directory from main application
     bancho.log = app.log.dir("bancho/");
+
+    this.log = bancho.dir("index.js");
     
     bancho.once('ready', () => {
-        bancho.log('Connected and logged in to bancho.');
+        this.log('Connected and logged in to bancho.');
     });
 
     bancho.on('disconnect', () => {
         // Disconnected from bancho succesfully, you should kill the process or re-login 
-        bancho.log('Disconnected from bancho.');
+        this.log('Disconnected from bancho.');
     });
 
     require("./libs/errorHandler.js")(bancho);

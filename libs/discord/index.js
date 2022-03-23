@@ -6,9 +6,10 @@ module.exports = (app) => {
     app.discord = client;
     // branch log directory from main application
     client.log = app.log.dir("discord/");
+    this.log = client.log.dir("index.js");
 
     client.once('ready', () => {
-        client.log("Connected to discord.");
+        this.log("Connected to discord.");
     });
 
     // Login to Discord with your client's token
