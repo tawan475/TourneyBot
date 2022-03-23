@@ -11,12 +11,14 @@ module.exports = function (discord) {
             discord.app.bancho.pm(destination, args.join(" "));
             let listener = (message, err) => {
                 if (err) {
-                    if (err.message === 'No such channel.') return msg.edit(`No such channel: ${channel}`);
+                    if (err.message === 'No such channel.') return msg.edit(`No such channel: ${destination}`);
+                    if (err.message === 'No such nick.') return msg.edit(`No such nick: ${destination}`);
                     return msg.edit("Unexpected Error!")
                 }
-                if (message.channel.name !== destination) return;
-
-                msg.edit(`${msg.channel.name}: ${message.content}`);
+                let channel = message.type === 'PRIVMSG' ? message.author : message.channel.name;
+                if (channel !== destination) return;
+                
+                msg.edit(`${channel}: ${message.content}`);
                 discord.app.bancho.removeListener("pm", listener);
                 discord.app.bancho.removeListener("channelLeave", listener);
             };
