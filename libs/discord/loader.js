@@ -22,7 +22,7 @@ module.exports = (discord, paths = []) => {
             toLoad.HASH = fileHASH;
 
             discord[folder][filename] = toLoad;
-            this.log(`Loaded ${path.relative(discord.dirname, filePath).replace(/\\/g, '/')}`);
+            this.log(`Loaded ./${path.relative(discord.dirname, filePath).replace(/\\/g, '/')}`);
         }
     });
 }
