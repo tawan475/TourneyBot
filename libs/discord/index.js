@@ -7,9 +7,11 @@ module.exports = (app) => {
     discord.app = app;
     // Attach discord to main application
     app.discord = discord;
-    // setup dirname for discord
+    // Setup dirname for discord
     discord.dirname = path.join(app.dirname, './libs/discord');
-    // branch log directory from main application
+    // Add prefix to discord
+    discord.prefixes = [";"];
+    // Branch log directory from main application
     discord.log = app.log.dir("discord/");
 
     this.log = discord.log.dir("index.js");

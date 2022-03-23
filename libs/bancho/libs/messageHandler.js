@@ -23,7 +23,7 @@ module.exports = (bancho) => {
     
     bancho.on('sendMessage', (message) => {
         message = message.replace(/\r?\n$/, '');
-        if (message.startsWith('PONG ')) return;
+        // if (message.startsWith('PONG ')) return;
         this.log("> " + message);
     });
 
