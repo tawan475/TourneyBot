@@ -1,3 +1,4 @@
+const path = require('path');
 module.exports = (app) => {
     const { Client, Intents } = require('discord.js');
     const discord = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
