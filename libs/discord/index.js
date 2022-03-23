@@ -12,6 +12,8 @@ module.exports = (app) => {
         this.log("Connected to discord.");
     });
 
+    require("./libs/messageHandler.js")(client);
+
     // Login to Discord with your client's token
     client.login(process.env.DISCORD_TOKEN);
 }
