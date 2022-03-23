@@ -7,7 +7,7 @@ module.exports = (app) => {
     // branch log directory from main application
     bancho.log = app.log.dir("bancho/");
 
-    this.log = bancho.dir("index.js");
+    this.log = bancho.log.dir("index.js");
     
     bancho.once('ready', () => {
         this.log('Connected and logged in to bancho.');
