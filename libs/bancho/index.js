@@ -2,6 +2,8 @@ module.exports = (app) => {
     const { banchoClient } = require('@tawan475/bancho.js');
     const bancho = new banchoClient();
 
+    // attach main app to bancho
+    bancho.app = app
     // Attach bancho to main application
     app.bancho = bancho;
     // branch log directory from main application
