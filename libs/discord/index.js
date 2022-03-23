@@ -19,7 +19,9 @@ module.exports = (app) => {
     });
 
     // Use loader to attach stuff to discord
-    require("./loader.js")(discord);
+    require("./loader.js")(discord, [
+        path.join(discord.dirname, "./libs"),
+    ]);
 
     // Login to Discord with your client's token
     discord.login(process.env.DISCORD_TOKEN);

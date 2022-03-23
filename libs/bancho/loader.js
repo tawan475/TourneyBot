@@ -22,7 +22,7 @@ module.exports = (bancho, paths = []) => {
             toLoad.HASH = fileHASH;
 
             bancho[folder][filename] = toLoad;
-            this.log(`Loaded ${path.relative(bancho.dirname, filePath)}`);
+            this.log(`Loaded ${path.relative(bancho.dirname, filePath).replace(/\\/g, '/')}`);
         }
     });
 }
