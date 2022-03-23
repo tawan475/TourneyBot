@@ -12,7 +12,7 @@ module.exports = (discord) => {
         var prefixes = discord.prefixes;
         const prefixRegex = new RegExp(`^${prefixes.join('|^')}`);
         if (!prefixRegex.test(message)) return;
-        const [prefix, matchedPrefix] = message.match(prefixRegex);
+        const [prefix, matchedPrefix] = message.content.match(prefixRegex);
         const args = message.content.slice(prefix.length).trim().split(/ +/);
         const command = args.shift().toLowerCase();
 
