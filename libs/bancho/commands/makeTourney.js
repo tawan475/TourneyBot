@@ -37,7 +37,16 @@ module.exports = function (bancho) {
         }
         channel.on("playerLeft", player => listener("leave", player));
         channel.on("playerJoin", player => listener("join", player));
-        channel.on("playerMoved", player => listener("move", player))
+        channel.on("playerMoved", player => listener("move", player));
+        const channelLeaveListener = (destination) => {
+            if (destination === channel.name) {
+                channel.removeListener("playerLeft", listener);
+                channel.removeListener("playerJoin", listener);
+                channel.removeListener("playerMoved", listener);
+                bancho.removeListener("channelLeave", channelLeaveListener);
+            }
+        }
+        bancho.on("channelLeave", channelLeaveListener);
     }
 
     return module;
