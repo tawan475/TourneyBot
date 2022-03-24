@@ -34,10 +34,9 @@ module.exports = function (bancho) {
         }
 
         const listener = (type, player) => {
-            console.log(type, player)
             if (type === "leave"){
-                if (player.username === playerOneUsername) playerOneUsername = null;
-                if (player.username === playerTwoUsername) playerTwoUsername = null;
+                if (player === playerOneUsername) playerOneUsername = null;
+                if (player === playerTwoUsername) playerTwoUsername = null;
                 return;
             }
             if (player.slot === 0) playerOneUsername = player.username;
