@@ -11,6 +11,7 @@ module.exports = function (bancho) {
 
         // remove everyone from the multiplayer
         let players = await message.channel.getPlayers();
+        let channel = message.channel;
         channel.send(`!mp size 1`)
         let firstPlayer = players.filter(p => p.slot === 1)[0];
         if (firstPlayer && firstPlayer.username) channel.send(`!mp kick ${firstPlayer.username}`);
