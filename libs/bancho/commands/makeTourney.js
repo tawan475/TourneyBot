@@ -1,12 +1,13 @@
 module.exports = function (bancho) {
     this.log = bancho.log.dir("makeTourney.js");
-    module.aliases = ['tourney', 'maketourney'] 
-    module.cooldown = 2000
+    module.log = this.log
+    module.aliases = ['tourney', 'maketourney'];
+    module.cooldown = 2000;
     module.execute = async function execute(bancho, message, args) {
         // make 1v1 tourney
 
         if (!message.channel.name.startsWith("#mp_")) return;
-        this.log(`Making tourney for ${message.channel.name}`);
+        module.log(`Making tourney for ${message.channel.name}`);
 
         // remove everyone from the multiplayer
         let players = await message.channel.getPlayers();
@@ -48,7 +49,7 @@ module.exports = function (bancho) {
             }
         }
         bancho.on("channelLeave", channelLeaveListener);
-    }
+    };
 
     return module;
 };

@@ -1,7 +1,8 @@
 module.exports = function (discord) {
     this.log = discord.log.dir("makeOsuLobby.js");
-    module.aliases = ['makelobby']
-    module.cooldown = 2000
+    module.log = this.log;
+    module.aliases = ['makelobby'];
+    module.cooldown = 2000;
     module.execute = function execute(discord, message, args) {
         if (message.author.id !== "728267443394576434") {
             return message.reply("Sorry! you do not have permissions to do that.");
@@ -14,7 +15,7 @@ module.exports = function (discord) {
             `\`/join #mp_${lobby.matchId}\`\r\n` +
             `https://osu.ppy.sh/mp/${lobby.matchId}`);
         })
-    }
+    };
 
     return module;
 };

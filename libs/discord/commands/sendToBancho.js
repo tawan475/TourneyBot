@@ -1,7 +1,8 @@
 module.exports = function (discord) {
     this.log = discord.log.dir("sendToBancho.js");
-    module.aliases = ['bancho']
-    module.cooldown = 2000
+    module.log = this.log;
+    module.aliases = ['bancho'];
+    module.cooldown = 2000;
     module.execute = function execute(discord, message, args) {
         if (message.author.id !== "728267443394576434") {
             return message.reply("Sorry! you do not have permissions to do that.");
@@ -16,7 +17,7 @@ module.exports = function (discord) {
             };
             discord.app.bancho.on("pm", listener)
         })
-    }
+    };
 
     return module;
 };
