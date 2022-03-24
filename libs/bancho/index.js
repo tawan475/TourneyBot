@@ -13,6 +13,8 @@ module.exports = (app) => {
     bancho.log = app.log.dir("bancho/");
 
     this.log = bancho.log.dir("index.js");
+
+    bancho.prefix = '!';
     
     bancho.once('ready', () => {
         this.log('Connected and logged in to bancho.');
@@ -25,6 +27,7 @@ module.exports = (app) => {
 
     require("./loader.js")(bancho, [
         path.join(bancho.dirname, './libs'),
+        path.join(bancho.dirname, './commands'),
     ]);
 
     bancho.login({
