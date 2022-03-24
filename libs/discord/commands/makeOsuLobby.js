@@ -11,9 +11,9 @@ module.exports = function (discord) {
         return message.reply("Creating a lobby, please wait...").then(async msg => {
             let lobby = await discord.app.bancho.createMultiplayer(lobbyName);
             console.log(lobby, lobby.matchId);
-            return msg.edit(`Lobby created! \`#mp_${lobby.matchId}\`
-            \`!mp join #mp_${lobby.matchId}\`
-            https://osu.ppy.sh/mp/${lobby.matchId}`);
+            return msg.edit(`Lobby created! \`#mp_${lobby.matchId}\`\r\n` +
+            `\`!mp join #mp_${lobby.matchId}\`\r\n` +
+            `https://osu.ppy.sh/mp/${lobby.matchId}`);
         })
     }
 
