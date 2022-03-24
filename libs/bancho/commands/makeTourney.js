@@ -26,14 +26,14 @@ module.exports = function (bancho) {
         // set mp to TeamVS ScoreV2 with 2 slots
         channel.send(`!mp set 2 3 2`);
         let acronym = bancho.app.acronym.toUpperCase();
+        
+        channel.send("Tourney match created!");
 
-        console.log(playerOneUsername, playerTwoUsername)
         if (playerOneUsername && playerTwoUsername) {
             channel.send(`!mp name ${acronym}: (${playerOneUsername}) vs (${playerTwoUsername})`);
         }
 
         const listener = (type, player) => {
-            console.log(type, player)
             if (type === "leave"){
                 if (player.username === playerOneUsername) playerOneUsername = null;
                 if (player.username === playerTwoUsername) playerTwoUsername = null;
