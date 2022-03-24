@@ -4,8 +4,9 @@ module.exports = function (bancho) {
     module.cooldown = 2000
     module.execute = async function execute(bancho, message, args) {
         // make 1v1 tourney
-        if (!args.length || !args.join("")) return;
-        if (!args[0] || args[0].length !== 3) return;
+
+        if (!message.channel.name.startsWith("#mp_")) return;
+        this.log(`Making tourney for ${message.channel.name}`);
 
         // remove everyone from the multiplayer
         let players = await message.channel.getPlayers();
