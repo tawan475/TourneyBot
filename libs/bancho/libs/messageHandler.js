@@ -25,8 +25,8 @@ module.exports = (bancho) => {
             if (message.startsWith('PONG ')) return;
             this.log("> " + message);
             const sendToMultiplayerRegex = /^PRIVMSG (#mp_[0-9]+) :(.+)$/;
-            let [found, destination, content] = message.match(sendToMultiplayerRegex);
-            if (!found) return;
+            if (!sendToMultiplayerRegex.test(message)) return;
+            let [, destination, content] = message.match(sendToMultiplayerRegex);
             message = {
                 type: 'pm',
                 author: bancho.username,

@@ -2,7 +2,7 @@ module.exports = function (bancho) {
     this.log = bancho.log.dir("makeTourney.js");
     module.aliases = ['tourney', 'maketourney'] 
     module.cooldown = 2000
-    module.execute = function execute(bancho, message, args) {
+    module.execute = async function execute(bancho, message, args) {
         // make 1v1 tourney
         if (!args.length || !args.join("")) return;
         if (!args[0] || args[0].length !== 3) return;
