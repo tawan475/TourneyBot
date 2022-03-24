@@ -6,6 +6,7 @@ module.exports = function (discord) {
         if (message.author.id !== "728267443394576434") {
             return message.reply("Sorry! you do not have permissions to do that.");
         }
+        if (!args.length || !args.join("")) return message.reply("Please provide a message to send!");
         return message.reply("Sending the message! waiting for reply...").then(msg => {
             discord.app.bancho.pm("BanchoBot", args.join(" "));
             let listener = (pm) => {

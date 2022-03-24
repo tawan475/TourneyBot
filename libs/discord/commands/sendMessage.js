@@ -7,6 +7,7 @@ module.exports = function (discord) {
             return message.reply("Sorry! you do not have permissions to do that.");
         }
         let destination = args.shift();
+        if (!args.length || !args.join("")) return message.reply("Please provide a message to send!");
         return message.reply("Sending the message! waiting for confirmation...").then(msg => {
             discord.app.bancho.pm(destination, args.join(" "));
             let listener = (message, err) => {
