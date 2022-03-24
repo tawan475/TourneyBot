@@ -1,4 +1,6 @@
 const path = require('path');
+const { Collection } = require('discord.js');
+
 module.exports = (app) => {
     const { banchoClient } = require('@tawan475/bancho.js');
     const bancho = new banchoClient();
@@ -15,6 +17,7 @@ module.exports = (app) => {
     this.log = bancho.log.dir("index.js");
 
     bancho.prefix = '!';
+    bancho.cooldowns = new Collection();
     
     bancho.once('ready', () => {
         this.log('Connected and logged in to bancho.');
