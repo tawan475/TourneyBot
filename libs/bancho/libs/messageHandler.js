@@ -1,3 +1,4 @@
+const fs = require('fs');
 const { Collection } = require('discord.js');
 
 module.exports = (bancho) => {
@@ -27,6 +28,7 @@ module.exports = (bancho) => {
             const sendToMultiplayerRegex = /^PRIVMSG (#mp_[0-9]+) :(.+)$/;
             if (!sendToMultiplayerRegex.test(message)) return;
             let [, destination, content] = message.match(sendToMultiplayerRegex);
+            type = 'pm';
             message = {
                 type: 'pm',
                 author: bancho.username,
