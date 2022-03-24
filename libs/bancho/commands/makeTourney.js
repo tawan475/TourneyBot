@@ -26,7 +26,7 @@ module.exports = function (bancho) {
         // set mp to TeamVS ScoreV2 with 2 slots
         channel.send(`!mp set 2 3 2`);
         let acronym = bancho.app.acronym.toUpperCase();
-        
+
         channel.send("Tourney match created!");
 
         if (playerOneUsername && playerTwoUsername) {
@@ -34,6 +34,7 @@ module.exports = function (bancho) {
         }
 
         const listener = (type, player) => {
+            console.log(type, player)
             if (type === "leave"){
                 if (player.username === playerOneUsername) playerOneUsername = null;
                 if (player.username === playerTwoUsername) playerTwoUsername = null;
@@ -46,7 +47,7 @@ module.exports = function (bancho) {
             }
         }
         channel.on("playerLeft", player => listener("leave", player));
-        channel.on("playerJoin", player => listener("join", player));
+        channel.on("playerJoined", player => listener("join", player));
         channel.on("playerMoved", player => listener("move", player));
         const channelLeaveListener = (destination) => {
             if (destination === channel.name) {
