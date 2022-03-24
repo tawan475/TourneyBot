@@ -12,15 +12,14 @@ module.exports = function (discord) {
         return message.reply("Sending the message! waiting for confirmation...").then(msg => {
             discord.app.bancho.pm(destination, args.join(" "));
             let listener = (message, err) => {
-                if (err) {
-                    if (err.message === 'No such channel.') return msg.edit(`No such channel: ${destination}`);
-                    if (err.message === 'No such nick.') return msg.edit(`No such nick: ${destination}`);
-                    return msg.edit("Unexpected Error!")
+                if (!err) return;
+                if (message !== destination) return;
+                if (err.message === 'No such channel.') {
+                    msg.edit(`No such channel: ${destination}`);
                 }
-                let channel = message.type === 'PRIVMSG' ? message.author : message.channel.name;
-                if (channel !== destination) return;
-                
-                msg.edit(`${channel}: ${message.content}`);
+                if (err.message === 'No such nick.') {
+                    msg.edit(`No such nick: ${destination}`);
+                }
                 discord.app.bancho.removeListener("pm", listener);
                 discord.app.bancho.removeListener("channelLeave", listener);
             };

@@ -12,9 +12,12 @@ module.exports = function (bancho) {
         // remove everyone from the multiplayer
         let players = await message.channel.getPlayers();
         let channel = message.channel;
-        channel.send(`!mp size 1`)
-        let firstPlayer = players.filter(p => p.slot === 1)[0];
-        if (firstPlayer && firstPlayer.username) channel.send(`!mp kick ${firstPlayer.username}`);
+        // channel.send(`!mp size 1`)
+        // let firstPlayer = players.filter(p => p.slot === 1)[0];
+        // if (firstPlayer && firstPlayer.username) channel.send(`!mp kick ${firstPlayer.username}`);
+
+        let playerOneUsername = players.filter(p => p.slot === 0)[0].username;
+        let playerTwoUsername = players.filter(p => p.slot === 1)[0].username;
 
         // lock the mp so players cant move to change team
         // first slot will always be blue
@@ -24,16 +27,20 @@ module.exports = function (bancho) {
         channel.send(`!mp set 2 3 2`);
         let acronym = bancho.app.acronym.toUpperCase();
 
-        let playerOneUsername, playerTwoUsername;
+        console.log(playerOneUsername, playerTwoUsername)
+        if (playerOneUsername && playerTwoUsername) {
+            channel.send(`!mp name ${acronym}: (${playerOneUsername}) vs (${playerTwoUsername})`);
+        }
 
         const listener = (type, player) => {
+            console.log(type, player)
             if (type === "leave"){
                 if (player.username === playerOneUsername) playerOneUsername = null;
                 if (player.username === playerTwoUsername) playerTwoUsername = null;
                 return;
             }
-            if (player.slot === 1) playerOneUsername = player.username;
-            if (player.slot === 2) playerTwoUsername = player.username;
+            if (player.slot === 0) playerOneUsername = player.username;
+            if (player.slot === 1) playerTwoUsername = player.username;
             if (playerOneUsername && playerTwoUsername) {
                 channel.send(`!mp name ${acronym}: (${playerOneUsername}) vs (${playerTwoUsername})`);
             }

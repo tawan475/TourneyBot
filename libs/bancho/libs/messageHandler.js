@@ -28,11 +28,13 @@ module.exports = (bancho) => {
             const sendToMultiplayerRegex = /^PRIVMSG (#mp_[0-9]+) :(.+)$/;
             if (!sendToMultiplayerRegex.test(message)) return;
             let [, destination, content] = message.match(sendToMultiplayerRegex);
+            let channel = bancho.getChannel(destination);
+            if (!channel) return;
             type = 'pm';
             message = {
                 type: 'pm',
                 author: bancho.username,
-                channel: bancho.getChannel(destination),
+                channel: channel,
                 content: content
             }
         }
