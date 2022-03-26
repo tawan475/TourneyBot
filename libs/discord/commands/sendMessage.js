@@ -12,7 +12,14 @@ module.exports = function (discord) {
         return message.reply("Sending the message! waiting for confirmation...").then(msg => {
             discord.app.bancho.pm(destination, args.join(" "));
             let listener = (message, err) => {
-                if (!err) return;
+                if (!err) {
+                    if (message.content === args.join(" ")) {
+                        msg.edit("Message sent!");
+                        discord.app.bancho.removeListener("pm", listener);
+                        discord.app.bancho.removeListener("channelLeave", listener);
+                        return;
+                    }
+                };
                 if (message !== destination) return;
                 if (err.message === 'No such channel.') {
                     msg.edit(`No such channel: ${destination}`);
@@ -23,8 +30,13 @@ module.exports = function (discord) {
                 discord.app.bancho.removeListener("pm", listener);
                 discord.app.bancho.removeListener("channelLeave", listener);
             };
-            discord.app.bancho.on("pm", listener)
-            discord.app.bancho.on("channelLeave", listener)
+            discord.app.bancho.on("pm", listener);
+            discord.app.bancho.on("channelLeave", listener);
+            setTimeout(() => {
+                discord.app.bancho.on("pm", listener);
+                discord.app.bancho.on("channelLeave", listener);
+                return msg.edit("Timed out!");
+            }, 10000);
         })
     };
 

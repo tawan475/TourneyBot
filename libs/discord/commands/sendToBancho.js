@@ -16,6 +16,10 @@ module.exports = function (discord) {
                 discord.app.bancho.removeListener("pm", listener);
             };
             discord.app.bancho.on("pm", listener)
+            setTimeout(() => {
+                discord.app.bancho.removeListener("pm", listener);
+                return msg.edit("Timed out!");
+            }, 10000);
         })
     };
 
