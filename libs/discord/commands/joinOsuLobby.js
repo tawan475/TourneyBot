@@ -4,7 +4,7 @@ module.exports = function (discord) {
     module.aliases = ['joinlobby'];
     module.cooldown = 1000;
     module.execute = function execute(discord, message, args) {
-        if (message.author.id !== "728267443394576434") {
+        if (!discord.app.discordModeratorId.includes(message.author.id)) {
             return message.reply("Sorry! you do not have permissions to do that.");
         }
         if (args[0] && !args[0].startsWith("#mp_")) return message.reply("Please use a valid lobby name! ie. #mp_98954523");

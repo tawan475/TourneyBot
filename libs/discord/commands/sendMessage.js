@@ -4,7 +4,7 @@ module.exports = function (discord) {
     module.aliases = ['send'];
     module.cooldown = 2000;
     module.execute = function execute(discord, message, args) {
-        if (message.author.id !== "728267443394576434") {
+        if (!discord.app.discordModeratorId.includes(message.author.id)) {
             return message.reply("Sorry! you do not have permissions to do that.");
         }
         let destination = args.shift();
