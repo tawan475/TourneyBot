@@ -11,13 +11,18 @@ module.exports = function (discord) {
         if (!args.length || !args.join("")) return message.reply("Please provide a message to send!");
         return message.reply("Sending the message! waiting for confirmation...").then(msg => {
             discord.app.bancho.pm(destination, args.join(" "));
+            let timeout = setTimeout(() => {
+                discord.app.bancho.on("pm", listener);
+                discord.app.bancho.on("channelLeave", listener);
+                return msg.edit("Timed out!");
+            }, 10000);
             let listener = (message, err) => {
                 if (!err) {
                     if (message.content === args.join(" ")) {
                         msg.edit("Message sent!");
                         discord.app.bancho.removeListener("pm", listener);
                         discord.app.bancho.removeListener("channelLeave", listener);
-                        return;
+                        return clearTimeout(timeout);
                     }
                 };
                 if (message !== destination) return;
@@ -29,14 +34,10 @@ module.exports = function (discord) {
                 }
                 discord.app.bancho.removeListener("pm", listener);
                 discord.app.bancho.removeListener("channelLeave", listener);
+                return clearTimeout(timeout);
             };
             discord.app.bancho.on("pm", listener);
             discord.app.bancho.on("channelLeave", listener);
-            setTimeout(() => {
-                discord.app.bancho.on("pm", listener);
-                discord.app.bancho.on("channelLeave", listener);
-                return msg.edit("Timed out!");
-            }, 10000);
         })
     };
 

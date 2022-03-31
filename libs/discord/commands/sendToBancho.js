@@ -10,16 +10,17 @@ module.exports = function (discord) {
         if (!args.length || !args.join("")) return message.reply("Please provide a message to send!");
         return message.reply("Sending the message! waiting for reply...").then(msg => {
             discord.app.bancho.pm("BanchoBot", args.join(" "));
+            let timeout = setTimeout(() => {
+                discord.app.bancho.removeListener("pm", listener);
+                return msg.edit("Timed out!");
+            }, 10000);
             let listener = (pm) => {
                 if (pm.author !== "BanchoBot") return;
                 msg.edit("BanchoBot: " + pm.content);
                 discord.app.bancho.removeListener("pm", listener);
+                return clearTimeout(timeout);
             };
-            discord.app.bancho.on("pm", listener)
-            setTimeout(() => {
-                discord.app.bancho.removeListener("pm", listener);
-                return msg.edit("Timed out!");
-            }, 10000);
+            discord.app.bancho.on("pm", listener);
         })
     };
 
