@@ -5,6 +5,7 @@ module.exports = function (bancho) {
     module.cooldown = 2000;
     module.execute = async function execute(bancho, message, args) {
         if (!message.channel.name.startsWith("#mp_")) return;
+        if (!message.channel.isRef) return message.channel.send(`I am not a referee! try !mp addref ${bancho.username}`);
         if (!message.channel.referees.include(message.author))
             return message.channel.send(`If you choose to pick first, the other player will choose a map to ban and then you choose a map to ban and then you can pick a map`);
 
