@@ -12,7 +12,7 @@ module.exports = function (bancho) {
 
         let players = await message.channel.getPlayers();
         for (let player of inviting){
-            if (players.filter(p => p.username === player)[0]) return;
+            if (players.filter(p => p.username === player)[0]) continue;
             module.log(`Inviting ${player} to ${message.channel.name}`);
             message.channel.send(`!mp invite ${player}`);
         }
