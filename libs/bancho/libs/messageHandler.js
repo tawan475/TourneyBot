@@ -20,7 +20,8 @@ module.exports = (bancho) => {
         this.log("message " + message.raw);
     });
 
-    const messageListener = (type, message) => {
+    const messageListener = (type, message, err) => {
+        if (err) return;
         if (type === 'sendMessage') {
             message = message.replace(/\r?\n$/, '');
             if (message.startsWith('PONG ')) return;
@@ -77,9 +78,9 @@ module.exports = (bancho) => {
 
         rCommand.execute(bancho, message, args);
     };
-    bancho.on('sendMessage', message => messageListener("sendMessage", message));
-    bancho.on('multiplayer', message => messageListener("multiplayer", message));
-    bancho.on('pm', message => messageListener("pm", message));
+    bancho.on('sendMessage', (message, err) => messageListener("sendMessage", message, err));
+    bancho.on('multiplayer', (message, err) => messageListener("multiplayer", message, err));
+    bancho.on('pm', (message, err) => messageListener("pm", message, err));
 
     return module;
 }

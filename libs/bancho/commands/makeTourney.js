@@ -1,4 +1,4 @@
-const tourneyLobby = require('../casses/tourneyLobby.js');
+const tourneyLobby = require('../classes/tourneyLobby.js');
 
 module.exports = function (bancho) {
     this.log = bancho.log.dir("makeTourney.js");
@@ -13,7 +13,8 @@ module.exports = function (bancho) {
         if (bancho.tourneyLobby.has(message.channel.name)) return message.channel.send(`This match is already been marked as a tournament lobby!`);
         module.log(`Making tourney for ${message.channel.name}`);
 
-        let lobby = new tourneyLobby(bancho, message.channel, bancho.app.acronym, bancho.app.mappool);
+        let lobby = new tourneyLobby(bancho, message.channel, bancho.app.acronym);
+        lobby.init();
 
         // add this channel to tourney lobbies
         bancho.tourneyLobby.set(message.channel.name, lobby);
