@@ -8,7 +8,7 @@ module.exports = class tourneyLobby {
         let players = await this.channel.getPlayers();
 
         this.playerOneUsername = players.filter(p => p.slot === 0)[0].username;
-        this.playerOneUsername = players.filter(p => p.slot === 1)[0].username;
+        this.playerTwoUsername = players.filter(p => p.slot === 1)[0].username;
 
         // lock the mp so players cant move to change team
         // first slot will always be blue
@@ -48,6 +48,4 @@ module.exports = class tourneyLobby {
         }
         this.bancho.on("channelLeave", channelLeaveListener);
     }
-
-
 }
