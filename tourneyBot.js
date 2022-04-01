@@ -5,6 +5,7 @@ app.dirname = __dirname;
 // IMPORTENT VALUES
 app.acronym = "PMT"; // tourney's acronym
 app.discordModeratorId = ["728267443394576434"];
+app.mappool = require('./mappools/PMT1-1.json');
 
 // Add global functions ie. logging functions, etc.
 require('./libs/globalFunctions.js')(app);
