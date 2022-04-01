@@ -43,10 +43,9 @@ module.exports = class tourneyLobby {
                 this.channel.removeListener("playerJoin", this.listener);
                 this.channel.removeListener("playerMoved", this.listener);
                 this.bancho.removeListener("channelLeave", this.channelLeaveListener);
-                this.channel.removeListener("close", this.channelLeaveListener);
             }
         }
         this.bancho.on("channelLeave", this.channelLeaveListener);
-        this.channel.on("close", this.channelLeaveListener(this.channel.name));
+        this.channel.once("close", () => this.channelLeaveListener(this.channel.name));
     }
 }

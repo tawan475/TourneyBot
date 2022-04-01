@@ -6,7 +6,7 @@ module.exports = function (bancho) {
     module.execute = async function execute(bancho, message, args) {
         if (!message.channel.name.startsWith("#mp_")) return;
         if (!message.channel.isRef) return message.channel.send(`I am not a referee! try !mp addref ${bancho.username}`);
-        // if (!bancho.tourneyLobby.has(message.channel.name)) return message.channel.send(`This match is not a tournament lobby!`);
+        if (!message.channel.referees.includes(message.author)) return message.channel.send(`You need to be a ref to use this command!`)
         if (!args.length) return;
         let inviting = args;
 
