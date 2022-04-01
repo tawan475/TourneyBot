@@ -22,7 +22,7 @@ module.exports = class tourneyLobby {
             this.channel.send(`!mp name ${this.acronym}: (${this.playerOneUsername}) vs (${this.playerTwoUsername})`);
         }
 
-        const listener = (type, player) => {
+        this.listener = (type, player) => {
             if (type === "leave") {
                 if (player === this.playerOneUsername) this.playerOneUsername = null;
                 if (player === this.playerTwoUsername) this.playerTwoUsername = null;
@@ -34,18 +34,19 @@ module.exports = class tourneyLobby {
                 this.channel.send(`!mp name ${this.acronym}: (${this.playerOneUsername}) vs (${this.playerTwoUsername})`);
             }
         }
-        this.channel.on("playerLeft", player => listener("leave", player));
-        this.channel.on("playerJoined", player => listener("join", player));
-        this.channel.on("playerMoved", player => listener("move", player));
+        this.channel.on("playerLeft", player => this.listener("leave", player));
+        this.channel.on("playerJoined", player => this.listener("join", player));
+        this.channel.on("playerMoved", player => this.listener("move", player));
         this.channelLeaveListener = (destination) => {
             if (destination === this.channel.name) {
-                this.channel.removeListener("playerLeft", listener);
-                this.channel.removeListener("playerJoin", listener);
-                this.channel.removeListener("playerMoved", listener);
+                this.channel.removeListener("playerLeft", this.listener);
+                this.channel.removeListener("playerJoin", this.listener);
+                this.channel.removeListener("playerMoved", this.listener);
                 this.bancho.removeListener("channelLeave", this.channelLeaveListener);
+                this.channel.removeListener("close", this.channelLeaveListener);
             }
         }
         this.bancho.on("channelLeave", this.channelLeaveListener);
-        this.bancho.on("close", this.channelLeaveListener(this.channel.name));
+        this.channel.on("close", this.channelLeaveListener(this.channel.name));
     }
 }
