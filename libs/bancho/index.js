@@ -18,6 +18,7 @@ module.exports = (app) => {
 
     bancho.prefix = '!';
     bancho.cooldowns = new Collection();
+    bancho.tourneyLobby = new Collection();
     
     bancho.once('ready', () => {
         this.log('Connected and logged in to bancho.');

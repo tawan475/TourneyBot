@@ -7,7 +7,12 @@ module.exports = function (bancho) {
         // make 1v1 tourney
 
         if (!message.channel.name.startsWith("#mp_")) return;
+        if (!message.channel.isRef) return channel.send(`I am not a referee! try !mp addref ${bancho.username}`);
+        if (bancho.tourneyLobby.has(message.channel.name)) return channel.send(`This match is already been marked as a tournament lobby!`);
         module.log(`Making tourney for ${message.channel.name}`);
+
+        // add this channel to tourney lobbies
+        bancho.tourneyLobby.set(message.channel.name, message.channel)
 
         // remove everyone from the multiplayer
         let players = await message.channel.getPlayers();
