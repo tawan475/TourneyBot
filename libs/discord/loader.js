@@ -4,7 +4,7 @@ const path = require('path');
 module.exports = (discord, paths = []) => {
     this.log = discord.log.dir("loader.js");
     paths.forEach(pathToFile => {
-        let arr = pathToFile.split("\\");
+        let arr = pathToFile.split(/\\|\//g);
         let folder = arr[arr.length - 1];
         discord[folder] = {};
 
